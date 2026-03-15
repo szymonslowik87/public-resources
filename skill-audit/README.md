@@ -2,7 +2,7 @@
 
 A Claude skill for auditing prompt instruction files (SKILL.md and similar) before installing them in AI workflows.
 
-Created by [Szymon Słowik](https://www.szymonslowik.com) - SEO strategist and AI workflow practitioner.
+Created by [Szymon Słowik](https://www.szymonslowik.com/about-szymon-slowik/)) - SEO strategist and AI workflow practitioner.
 
 ---
 
