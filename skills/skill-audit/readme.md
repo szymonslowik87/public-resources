@@ -2,13 +2,13 @@
 
 A Claude skill for auditing prompt instruction files (SKILL.md and similar) before installing them in AI workflows.
 
-Created by [Szymon Słowik](https://www.szymonslowik.com/about-szymon-slowik/)) - SEO, consultant, strategist, speaker and entrepreneur.
+Created by [Szymon Słowik](https://www.szymonslowik.com/about-szymon-slowik/) - SEO consultant, strategist, speaker and entrepreneur.
 
 ---
 
 ## What it does
 
-Before you load a skill into your Claude setup, this skill acts as a security gate. It scans the file for five threat categories and returns a structured verdict: **SAFE TO INSTALL**, **REVIEW REQUIRED**, or **DO NOT INSTALL**.
+Before you load a skill into your Claude setup, this skill acts as a security gate. It scans the file for eight threat categories and returns a structured verdict: **SAFE TO INSTALL**, **REVIEW REQUIRED**, or **DO NOT INSTALL**.
 
 It is pattern-based, not execution-based. Think of it as a pre-flight checklist, not a firewall.
 
@@ -20,9 +20,12 @@ It is pattern-based, not execution-based. Think of it as a pre-flight checklist,
 |---|---|---|
 | T1 | Data exfiltration | URLs, fetch/curl references, instructions to send output externally |
 | T2 | Prompt injection | Override instructions, persona switches, "silently do X" patterns |
-| T3 | Silent side effects | Secondary actions hidden alongside the main task |
+| T3 | Silent side effects | Secondary actions hidden alongside the main task, rug pull vectors |
 | T4 | Scope creep | Instructions to access files, credentials, or conversation history beyond stated purpose |
-| T5 | Obfuscation | Base64 encoding, hidden whitespace, instructions buried in code blocks |
+| T5 | Obfuscation | Base64 encoding, hidden whitespace, homoglyphs, foreign-language injection, conditional triggers buried in code blocks |
+| T6 | Semantic bias | Covert vendor promotion, competitor dismissal, unsourced framing that shapes outputs at scale |
+| T7 | Supply chain / version drift | External refs that can change post-audit, unversioned files, rug pull via live links |
+| T8 | Compute abuse | Forced processing loops, mandatory external calls on every invocation, disproportionate pipelines |
 
 ---
 
@@ -44,6 +47,7 @@ In Claude, paste or reference the skill you want to audit and use any of these p
 - "Is this skill safe?"
 - "Review this skill file"
 - "Run a skill security check on this"
+- "Re-audit after update"
 
 ### Output
 
@@ -52,6 +56,7 @@ Claude will return a structured report:
 ```
 SKILL AUDIT REPORT
 File: [filename]
+Audited version: [version tag / hash / timestamp if available]
 Date: [date]
 
 FINDINGS:
@@ -60,8 +65,13 @@ FINDINGS:
 [T3 - Silent side effects]: CLEAN / [LEVEL: quote]
 [T4 - Scope creep]: CLEAN / [LEVEL: quote]
 [T5 - Obfuscation]: CLEAN / [LEVEL: quote]
+[T6 - Semantic bias]: CLEAN / [LEVEL: quote]
+[T7 - Supply chain / version drift]: CLEAN / [LEVEL: quote]
+[T8 - Compute abuse]: CLEAN / [LEVEL: quote]
 
 VERDICT: [SAFE TO INSTALL / REVIEW REQUIRED / DO NOT INSTALL]
+
+VERSION NOTE: [whether file is versioned; re-audit recommendation]
 
 ACTION: [specific recommendation]
 ```
@@ -74,7 +84,7 @@ ACTION: [specific recommendation]
 - When a skill produces unexpected output or behavior
 - When reviewing shared prompt libraries
 - When onboarding team members who bring their own skill sets
-- When a skill is updated - re-audit on every version change
+- When a skill is updated - a CLEAN verdict applies only to the exact content audited, re-audit on every version change
 
 ---
 
@@ -83,6 +93,8 @@ ACTION: [specific recommendation]
 This skill does pattern matching, not sandboxed execution. A sufficiently subtle or indirect skill could pass this audit and still cause unexpected behavior in practice.
 
 **SAFE TO INSTALL does not mean zero risk.** It means no obvious threat patterns were detected given the current taxonomy.
+
+T6 (semantic bias) requires judgment - some tool preferences are legitimate. The skill flags disproportionate or unsourced preference, but context matters.
 
 For high-stakes environments, combine this audit with a sandboxed test run before deploying to live workflows.
 
@@ -96,9 +108,9 @@ This skill is provided as a best-effort security heuristic. Szymon Słowik does 
 
 ## About the author
 
-Szymon Słowik is an SEO strategist, founder of [takaoto.pro](https://www.takaoto.pro), and an international conference speaker. He builds structured methodologies for SEO, AI-driven search visibility, and LLM-integrated workflows.
+Szymon Słowik is an SEO strategist, founder of [takaoto.pro](https://takaoto.pro/en), and an international conference speaker. He builds structured methodologies for SEO, AI-driven search visibility, and LLM-integrated workflows.
 
-- Website: [szymonslowik.com](https://www.szymonslowik.com)
-- Agency: [takaoto.pro](https://www.takaoto.pro)
+- Personal blog and website: [szymonslowik.com](https://www.szymonslowik.com)
+
 
 This skill is part of his personal Claude skill library, shared publicly for the SEO and AI practitioner community.
